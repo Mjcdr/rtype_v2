@@ -48,11 +48,7 @@ public class EnemyBullet : MonoBehaviour
             Explode();
             return;
         }
-
-        if (collision.CompareTag("Obstacle"))
-        {
-            Explode();
-        }
+        // Se vuoi che esploda anche su altri oggetti, aggiungi qui altre condizioni
     }
 
     private void Explode()
@@ -66,7 +62,6 @@ public class EnemyBullet : MonoBehaviour
         {
             bulletCollider.enabled = false;
         }
-        // Distruggi il bullet dopo una breve frazione di secondo per mostrare l'esplosione
-        Destroy(gameObject, 0.2f);
+        Destroy(gameObject, 0.2f); // tempo per mostrare la sprite di esplosione
     }
 }

@@ -39,19 +39,11 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hasExploded) return;
-
         var damageable = collision.GetComponent<IDamageable>();
         if (damageable != null)
         {
             damageable.TakeDamage(damage);
-            Explode();
-            return;
-        }
-
-        if (collision.CompareTag("Obstacle"))
-        {
-            Explode();
+            Explode(); // o Destroy(gameObject);
         }
     }
 
