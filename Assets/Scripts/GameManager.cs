@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public string gameOverSceneName = "GameOver";
-    public string nextLevelSceneName = "BossLevel";
+    public string gameOverSceneName = "S_GameOver";
+    public string nextLevelSceneName = "S_BossLevel";
 
     private PlayerController player;
     private EnemyBehavior[] enemies;
