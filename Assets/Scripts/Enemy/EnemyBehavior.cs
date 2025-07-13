@@ -7,13 +7,14 @@ public class EnemyBehavior : MonoBehaviour, IDamageable
     public float shootingInterval = 2f; 
     public GameObject projectilePrefab; 
     public Transform player; 
-    public Sprite explosionSprite; // Assegna la sprite di esplosione da Inspector
-    public float collisionDamage = 10f; // Danno da collisione modificabile
+    public Sprite explosionSprite; 
+    public float collisionDamage = 10f; 
 
     private float nextShootTime;
     private bool hasExploded = false;
     private SpriteRenderer spriteRenderer;
     private Collider2D enemyCollider;
+    private bool isVisible = false;
 
     void Start()
     {
@@ -23,12 +24,50 @@ public class EnemyBehavior : MonoBehaviour, IDamageable
         enemyCollider = GetComponent<Collider2D>();
     }
 
+    private void OnBecameVisible()
+    {
+        Debug.Log("Nemico visibile!");
+        isVisible = true;
+    }
+
+    private void OnBecameInvisible()
+    {
+        Debug.Log("Nemico NON visibile!");
+        isVisible = false;
+    }
+
     void Update()
     {
         if (!hasExploded)
         {
-            MoveTowardsPlayer();
-            HandleShooting();
+            if (!IsVisibleFromMainCamera())
+            {
+                MoveHorizontallyTowardsPlayer();
+            }
+            else
+            {
+                MoveTowardsPlayer();
+                HandleShooting();
+            }
+        }
+    }
+
+    private bool IsVisibleFromMainCamera()
+    {
+        var renderer = GetComponent<Renderer>();
+        if (renderer == null) return false;
+        var cam = Camera.main;
+        if (cam == null) return false;
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
+        return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+    }
+
+    private void MoveHorizontallyTowardsPlayer()
+    {
+        if (player != null)
+        {
+            Vector2 direction = new Vector2(player.position.x - transform.position.x, 0).normalized;
+            transform.Translate(direction * moveSpeed * Time.deltaTime);
         }
     }
 
@@ -99,4 +138,6 @@ public class EnemyBehavior : MonoBehaviour, IDamageable
         }
         Destroy(gameObject, 0.2f);
     }
+
+  
 }
