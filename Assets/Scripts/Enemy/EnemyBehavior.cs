@@ -7,19 +7,29 @@ public class EnemyBehavior : MonoBehaviour, IDamageable
     public float shootingInterval = 2f; 
     public GameObject projectilePrefab; 
     public Transform player; 
+    public Sprite explosionSprite; // Assegna la sprite di esplosione da Inspector
+    public float collisionDamage = 10f; // Danno da collisione modificabile
 
     private float nextShootTime;
+    private bool hasExploded = false;
+    private SpriteRenderer spriteRenderer;
+    private Collider2D enemyCollider;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         nextShootTime = Time.time + shootingInterval; 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        enemyCollider = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        MoveTowardsPlayer();
-        HandleShooting();
+        if (!hasExploded)
+        {
+            MoveTowardsPlayer();
+            HandleShooting();
+        }
     }
 
     private void MoveTowardsPlayer()
@@ -56,10 +66,37 @@ public class EnemyBehavior : MonoBehaviour, IDamageable
 
     public void TakeDamage(int amount)
     {
+        if (hasExploded) return;
         health -= amount;
         if (health <= 0)
         {
-            Destroy(gameObject);
+            ExplodeAndDestroy();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (hasExploded) return;
+
+        var damageable = collision.GetComponent<IDamageable>();
+        if (damageable != null && collision.CompareTag("Player"))
+        {
+            damageable.TakeDamage(Mathf.RoundToInt(collisionDamage));
+            ExplodeAndDestroy();
+        }
+    }
+
+    private void ExplodeAndDestroy()
+    {
+        hasExploded = true;
+        if (spriteRenderer != null && explosionSprite != null)
+        {
+            spriteRenderer.sprite = explosionSprite;
+        }
+        if (enemyCollider != null)
+        {
+            enemyCollider.enabled = false;
+        }
+        Destroy(gameObject, 0.2f);
     }
 }

@@ -5,7 +5,7 @@ public class EnemyBullet : MonoBehaviour
     public Vector2 direction = new Vector2(1, 0);
     public float speed = 5;
     public int damage = 1;
-    public Sprite explosionSprite; // Assegna la sprite dell'esplosione da Inspector
+    public Sprite explosionSprite; 
 
     public Vector2 velocity;
     private bool hasExploded = false;
