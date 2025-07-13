@@ -1,8 +1,7 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI; 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
 
     public float moveSpeed = 5f; 
@@ -16,9 +15,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform attack_Point;
 
+    public int health = 20;
+    [SerializeField] private Slider healthBar; 
+
+
     void Start()
     {
         current_Attack_Timer = attack_Timer;
+        if (healthBar != null)
+        {
+            healthBar.maxValue = health;
+            healthBar.value = health;
+        }
     }
 
 
@@ -79,4 +87,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        if (healthBar != null)
+            healthBar.value = health;
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
