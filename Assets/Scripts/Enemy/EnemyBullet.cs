@@ -48,7 +48,6 @@ public class EnemyBullet : MonoBehaviour
             Explode();
             return;
         }
-        // Se vuoi che esploda anche su altri oggetti, aggiungi qui altre condizioni
     }
 
     private void Explode()
@@ -62,6 +61,6 @@ public class EnemyBullet : MonoBehaviour
         {
             bulletCollider.enabled = false;
         }
-        Destroy(gameObject, 0.2f); // tempo per mostrare la sprite di esplosione
+        Destroy(gameObject, 0.2f); // tempo per sprite di esplosione
     }
 }

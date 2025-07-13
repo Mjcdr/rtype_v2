@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         if (health <= 0)
         {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("S_GameOver");
             Destroy(gameObject);
         }
     }

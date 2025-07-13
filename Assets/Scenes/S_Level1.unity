@@ -2146,8 +2146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fb717c9f5dfff409212e49f17be158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverSceneName: GameOver
-  nextLevelSceneName: BossLevel
+  gameOverSceneName: S_GameOver
+  nextLevelSceneName: S_BossLevel
 --- !u!1 &1690374284
 GameObject:
   m_ObjectHideFlags: 0

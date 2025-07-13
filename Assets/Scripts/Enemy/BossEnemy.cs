@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI; 
 
 public class BossEnemy : MonoBehaviour, IDamageable
 {
@@ -10,13 +11,17 @@ public class BossEnemy : MonoBehaviour, IDamageable
     public GameObject projectilePrefab;
     public Transform player;
     public Sprite explosionSprite;
-    public string victorySceneName = "Victory";
+    public string victorySceneName = "S_Victory";
+    [SerializeField] private Slider healthBar;
+    public float collisionDamage = 20f; // Danno da collisione modificabile
+    public string gameOverSceneName = "S_GameOver";
 
     private float nextShootTime;
     private float startY;
     private bool hasExploded = false;
     private SpriteRenderer spriteRenderer;
     private Collider2D bossCollider;
+    private int maxHealth;
 
     void Start()
     {
@@ -25,6 +30,13 @@ public class BossEnemy : MonoBehaviour, IDamageable
         nextShootTime = Time.time + shootingInterval;
         spriteRenderer = GetComponent<SpriteRenderer>();
         bossCollider = GetComponent<Collider2D>();
+        maxHealth = health;
+
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = health;
+        }
     }
 
     void Update()
@@ -56,10 +68,7 @@ public class BossEnemy : MonoBehaviour, IDamageable
     {
         if (projectilePrefab != null && player != null)
         {
-            // Direzione base verso il player
             Vector2 toPlayer = (player.position - transform.position).normalized;
-
-            // Aggiungi casualità all'angolo (±30 gradi)
             float angleOffset = Random.Range(-30f, 30f);
             float angle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg + angleOffset;
             Vector2 shootDir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
@@ -77,8 +86,29 @@ public class BossEnemy : MonoBehaviour, IDamageable
     {
         if (hasExploded) return;
         health -= amount;
+        if (healthBar != null)
+            healthBar.value = health;
         if (health <= 0)
         {
+            ExplodeAndVictory();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (hasExploded) return;
+
+        var damageable = collision.GetComponent<IDamageable>();
+        if (damageable != null && collision.CompareTag("Player"))
+        {
+            damageable.TakeDamage(Mathf.RoundToInt(collisionDamage));
+
+            PlayerController playerController = collision.GetComponent<PlayerController>();
+            if (playerController != null && playerController.health <= 0)
+            {
+                SceneManager.LoadScene(gameOverSceneName);
+            }
+
             ExplodeAndVictory();
         }
     }
@@ -96,6 +126,8 @@ public class BossEnemy : MonoBehaviour, IDamageable
         }
         Invoke(nameof(GoToVictory), 0.5f);
         Destroy(gameObject, 0.5f);
+        if (healthBar != null)
+            healthBar.gameObject.SetActive(false);
     }
 
     private void GoToVictory()

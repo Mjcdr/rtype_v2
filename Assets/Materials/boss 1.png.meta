@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ed96459514acc58499681618bd7f8644
+guid: c83fa7e39b743f546a135491fd779b51
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5634813283596733603
-    second: Waves_of_the_Warp_0
+      213: 7261323403473509586
+    second: boss 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Waves_of_the_Warp_0
+      name: boss 1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1900
-        height: 1200
+        x: 6
+        y: 14
+        width: 638
+        height: 638
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3ac8f60b3d0e23e40800000000000000
-      internalID: 5634813283596733603
+      spriteID: 2dcd44fc92765c460800000000000000
+      internalID: 7261323403473509586
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Waves_of_the_Warp_0: 5634813283596733603
+      boss 1_0: 7261323403473509586
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
